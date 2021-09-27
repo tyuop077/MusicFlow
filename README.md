@@ -1,5 +1,5 @@
 # MusicFlow
 
-Web-приложение на ASP.NET Core, сервер Kestrel, шаблонизатор Razor, БД Postgresql или MS SQL, HTML, CSS (с Bootstrap или альтернативной), JS с JQuery
+Web-app on ASP.NET Core with Kestrel server, Razor, PostgreSQL/MS SQL, HTML, CSS (with bootstrap or other), JS with JQuery
 
-#### Статус: Ожидание ТЗ от Dev2
+#### Technical specification: https://disk.yandex.ru/d/WuUJvtNHfu5iyQ
