@@ -16,6 +16,8 @@ namespace MusicFlow
 
         public AuthManager(string tokenKey) => this.tokenKey = tokenKey;
 
+        public readonly IDictionary<string, string> tokens = new Dictionary<string, string>();
+
         public string Login(string username, string password, UsersContext db)
         {
             if (!db.Users.Any(
@@ -36,7 +38,13 @@ namespace MusicFlow
                     SecurityAlgorithms.HmacSha256Signature)
             };
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+
+            // We're using ClaimsIdentity and dictionary
+
+            string tokenString = tokenHandler.WriteToken(token);
+            tokens.Add(tokenString, username);
+
+            return tokenString;
         }
     }
 }
