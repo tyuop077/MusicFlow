@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="24px"
+   viewBox="0 0 24 24"
+   width="24px"
+   fill="#000000"
+   version="1.1"
+   id="svg6"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10">
+    <linearGradient
+       id="linearGradient849">
+      <stop
+         style="stop-color:#7584ff;stop-opacity:1"
+         offset="0"
+         id="stop845" />
+      <stop
+         style="stop-color:#55cae5;stop-opacity:1"
+         offset="1"
+         id="stop847" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient849"
+       id="linearGradient851"
+       x1="6.433538"
+       y1="19.242716"
+       x2="20.679924"
+       y2="4.4940805"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <path
+     d="M0 0h24v24H0z"
+     fill="none"
+     id="path2" />
+  <path
+     d="m 13.823462,3.0838097 -1.869621,9.0897153 c -0.426113,-0.261204 -0.893699,-0.469683 -1.412831,-0.57646 -2.4389433,-0.501655 -4.8126786,1.06218 -5.3143332,3.501123 -0.5016545,2.438943 1.0621807,4.812678 3.5011236,5.314333 2.2626336,0.46539 4.4664486,-0.867952 5.1646246,-3.021449 l 0.04897,0.01007 2.216145,-10.7744467 3.917981,0.8058708 0.604403,-2.9384855 z"
+     id="path4"
+     style="fill:url(#linearGradient851);fill-opacity:1" />
+</svg>
