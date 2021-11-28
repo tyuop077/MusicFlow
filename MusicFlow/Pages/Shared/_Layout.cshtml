@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav id="nav" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">
                     <img src="/img/logo.svg" />
@@ -22,14 +22,14 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Test">Test</a>
+                            <a class="nav-link text-white" asp-area="" asp-page="/Test">Test</a>
                         </li>
                     </ul>
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-success" asp-area="" asp-page="/Profile">Profile</a>
+                            <a class="nav-link text-white" asp-area="" asp-page="/Profile">Profile</a>
                         </li>
                     </ul>
                 </div>
@@ -42,9 +42,9 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - MusicFlow - <a asp-area="" asp-page="/">Main page</a>
+    <footer class="border-top bg-dark footer text-muted">
+        <div class="container text-white" >
+            MusicFlow by <a href="https://github.com/tyuop077">tyuop077</a>
         </div>
     </footer>
 

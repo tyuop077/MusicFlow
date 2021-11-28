@@ -7,6 +7,10 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+#nav {
+    background-color: #2d4d78!important;
+}
+
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
