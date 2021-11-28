@@ -18,11 +18,11 @@ namespace MusicFlow
 
         public readonly IDictionary<string, string> tokens = new Dictionary<string, string>();
 
-        public string Login(string username, string password, UsersContext db)
+        public string Login(string username, string password)
         {
-            if (!db.Users.Any(
+            /*if (!db.Users.Any(
                 User => User.Username == username && User.Password == password)
-            ) return null;
+            ) return null;*/
 
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.ASCII.GetBytes(tokenKey);

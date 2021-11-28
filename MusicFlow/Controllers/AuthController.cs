@@ -18,10 +18,10 @@ namespace MusicFlow.Controllers
         private readonly AuthManager authManager;
         public AuthController(AuthManager authManager) => this.authManager = authManager;
 
-        [HttpGet("login")]
-        public HttpResponseMessage Authenticate([FromBody]AuthCredentials credentials, UsersContext usersContext)
+        [HttpPost("login")]
+        public HttpResponseMessage Authenticate([FromBody]AuthCredentials credentials)
         {
-            string token = authManager.Login(credentials.username, credentials.password, usersContext);
+            string token = authManager.Login(credentials.username, credentials.password);
             HttpResponseMessage resp = new HttpResponseMessage();
             if (token is null)
             {
@@ -30,7 +30,7 @@ namespace MusicFlow.Controllers
             else
             {
                 CookieHeaderValue cookie = new CookieHeaderValue("token", token);
-                resp.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                //resp.Headers.AddCookies(new CookieHeaderValue[] { cookie });
                 resp.StatusCode = HttpStatusCode.OK;
             }
             return resp;
