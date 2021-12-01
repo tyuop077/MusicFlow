@@ -1,0 +1,22 @@
+﻿body {
+    background: #24292e;
+}
+
+.showcase {
+    display: table;
+    width: 100%;
+    height: auto;
+    margin: 10px 0px;
+}
+
+.showcase .content {
+    display: table-cell;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.showcase img {
+    display: block;
+    float: right;
+    width: 300px;
+}
