@@ -1,0 +1,20 @@
+﻿@page
+@model MusicFlow.Pages.LoginModel
+@{
+}
+<link rel="stylesheet" href="~/css/auth.css" />
+<div class="AuthPage">
+    <form class="AuthContainer" method="post">
+        <h1>Sign in</h1>
+        <input class="TextInput" type="email" name="email" placeholder="Email" />
+        <input class="TextInput" type="password" name="password" placeholder="Password" />
+        @if (ViewData["tooltip"] is not null)
+        {
+            <p id="tooltip">@ViewData["tooltip"]</p>
+        }
+        <div class="FormButtonLine">
+            <input class="FormButton" type="submit" value="Login" />
+        </div>
+        <p>Haven't registered? <a href="/register">Register here</a></p>
+    </form>
+</div>

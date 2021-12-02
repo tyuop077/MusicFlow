@@ -1,0 +1,82 @@
+﻿body {
+    
+}
+
+.AuthPage {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.AuthContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.AuthContainer img {
+    width: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 100px;
+}
+
+p {
+    padding-top: 10px;
+    font: normal 18px Calibri;
+    text-align: center;
+}
+
+#tooltip {
+    color: red;
+    text-align: center;
+}
+
+.TextInput {
+    width: 375px;
+    height: 60px;
+    outline: 0;
+    border-width: 0 0 0.5px;
+    border-color: lightgray;
+    font-size: 17px;
+    text-align: center;
+}
+
+.TextInput:hover {
+    border-color: #6b78c2;
+}
+
+.TextInput:focus {
+    border-color: #002DFF;
+}
+
+.FormButton {
+    margin: 20px;
+    border-radius: 25px;
+    font-size: 17px;
+    border: 3px solid #002DFF;
+    box-sizing: border-box;
+    width: 150px;
+    height: 50px;
+    background: transparent;
+    font-weight: 600;
+}
+
+.FormButton:hover {
+    background: #74748014;
+}
+
+.FormButton:active {
+    background: #74748050;
+}
+
+.FormButtonLine {
+    text-align: center;
+}
+
+.AuthContainer h1 {
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin: 20px;
+}
