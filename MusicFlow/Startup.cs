@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using MusicFlow.Middlewares;
+using MusicFlow.Services;
 
 namespace MusicFlow
 {
@@ -32,6 +33,8 @@ namespace MusicFlow
 
             services.AddRouting(options => options.LowercaseUrls = true);
 
+            byte[] secret_key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("AUTH_SECRET"));
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -44,11 +47,13 @@ namespace MusicFlow
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("AUTH_SECRET"))),
+                    IssuerSigningKey = new SymmetricSecurityKey(secret_key),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
+
+            services.AddSingleton(new AuthManager(secret_key));
 
             services.AddHttpContextAccessor();
         }

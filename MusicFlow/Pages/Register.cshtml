@@ -1,12 +1,11 @@
 ﻿@page
-@model MusicFlow.Pages.LoginModel
-@{
-}
+@model MusicFlow.Pages.RegisterModel
 <link rel="stylesheet" href="~/css/auth.css" />
 <div class="AuthPage">
     <form class="AuthContainer" method="post">
         <h1>Register</h1>
         <input class="TextInput" type="email" name="email" placeholder="Email" />
+        <input class="TextInput" type="text" name="username" placeholder="Username" />
         <input class="TextInput" type="password" name="password" placeholder="Password" />
         <input class="TextInput" type="password" name="password2" placeholder="Repeat password" />
         @if (ViewData["tooltip"] is not null)
