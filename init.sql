@@ -1,4 +1,6 @@
-DROP TABLE Users
+CREATE DATABASE MusicFlow
+USE MusicFlow
+--DROP TABLE Users
 
 CREATE TABLE Users (
     id INT NOT NULL IDENTITY(1,1),
@@ -8,3 +10,8 @@ CREATE TABLE Users (
     avatar VARCHAR(255), -- id of avatar path
     PRIMARY KEY (id)
 )
+
+--INSERT INTO Users(email, username, password) OUTPUT inserted.id VALUES('', '', '')
+
+--SELECT * FROM Users
+--SELECT TOP 100 u.* FROM Users u

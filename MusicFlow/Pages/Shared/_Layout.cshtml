@@ -34,17 +34,19 @@
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            @if (username is not null)
-                            {
-                                <a class="nav-link text-white" asp-area="" asp-page="/profile">@username</a>
-                            }
-                            else
-                            {
+                        @if (username is not null)
+                        {
+                            <a class="nav-link text-white" asp-area="" asp-page="/profile">@username</a>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-page="/login">Sign in</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-page="/register">Register</a>
-                            }  
-                        </li>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

@@ -31,7 +31,8 @@ namespace MusicFlow.Services
                 }),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(secretKey),
-                    SecurityAlgorithms.HmacSha256Signature)
+                    SecurityAlgorithms.HmacSha256Signature
+                )
             };
             return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenGenerator));
         }

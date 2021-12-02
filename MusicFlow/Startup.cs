@@ -55,6 +55,8 @@ namespace MusicFlow
 
             services.AddSingleton(new AuthManager(secret_key));
 
+            services.AddSingleton(new Database(Configuration.GetConnectionString("db")));
+
             services.AddHttpContextAccessor();
         }
 

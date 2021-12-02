@@ -14,9 +14,11 @@ namespace MusicFlow.Pages
     public class RegisterModel : PageModel
     {
         private AuthManager authManager;
-        public RegisterModel(AuthManager authManager)
+        private Database db;
+        public RegisterModel(AuthManager authManager, Database database)
         {
             this.authManager = authManager;
+            this.db = database;
         }
         public IActionResult OnGet()
         {
@@ -52,6 +54,14 @@ namespace MusicFlow.Pages
                 Username = username,
                 Password = authManager.HashPassword(password)
             };
+
+            DBReturnStatus dbRes = await db.RegisterUser(user);
+
+            if (dbRes == DBReturnStatus.ALREADY_EXISTS)
+            {
+                ViewData["tooltip"] = "That user already exists!";
+                return Page();
+            }
 
             string token = authManager.GenerateToken(user);
 
