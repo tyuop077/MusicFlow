@@ -7,6 +7,8 @@ CREATE TABLE Users (
     email VARCHAR(255) UNIQUE,
     username VARCHAR(255) UNIQUE,
     password BINARY(32), -- sha256 salted hashed password
+    --salt BINARY(4) salt for each user (harder to bruteforce)
+    --avatar VARBINARY(max), -- IMAGE was deprecated in ms sql
     avatar VARCHAR(255), -- id of avatar path
     PRIMARY KEY (id)
 )

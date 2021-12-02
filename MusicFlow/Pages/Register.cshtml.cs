@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,18 +25,9 @@ namespace MusicFlow.Pages
 
         public async Task<IActionResult> OnPostAsync([FromForm]string email, [FromForm]string username, [FromForm]string password, [FromForm]string password2)
         {
-            /*if (!ModelState.IsValid)
-            {
-                string error = String.Join(" | ", ModelState.Values
-                    .SelectMany(entry => entry.Errors)
-                    .Select(e => e.ErrorMessage));
-                ViewData["tooltip"] = $"Couldn't get username and password data: {error}";
-                return Page();
-            }*/
-
             if (password != password2)
             {
-                ViewData["tooltip"] = $"Passwords aren't same {password}; {password2}";
+                ViewData["tooltip"] = $"Passwords aren't same, please try again";
                 return Page();
             }
 
@@ -70,11 +59,8 @@ namespace MusicFlow.Pages
                 MaxAge = TimeSpan.FromDays(7)
             });
 
-            // TODO implement DB user check
-
-            ViewData["tooltip"] = $"Test error response, hashed password: {user.Password}";
-
-            return Page();
+            //return Redirect("/");
+            return RedirectToPage("Index");
         }
     }
 }
