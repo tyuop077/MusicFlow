@@ -23,14 +23,17 @@
         <h1>Profile</h1>
         <img class="avatarImage" src=@ViewData["avatar"] alt="Profile avatar" />
         <p>Current user id: @id</p>
-        <form method="post">
-            <input type="file" name="file" value="asd" />
-            <div class="FormButtonLine">
-                <input class="FormButton" type="submit" value="Reset avatar" />
-            </div>
+        <form method="post" id="imageUploader">
+            <input type="hidden" name="action" value="set_avatar" />
+            <input type="file" name="file" onchange='document.getElementById("imageUploader").submit();' />
+        </form>
+        <form method="post" class="FormButtonLine">
+            <input type="hidden" name="action" value="reset_avatar" />
+            <input class="FormButton" type="submit" value="Reset avatar" />
         </form>
         <form class="AuthContainer" method="post">
             <h2>Email</h2>
+            <input type="hidden" name="action" value="email" />
             <input class="TextInput" type="email" name="email" value=@ViewData["Email"] placeholder="Email" />
             <div class="FormButtonLine">
                 <input class="FormButton" type="submit" value="Change" />
@@ -38,8 +41,10 @@
         </form>
         <form class="AuthContainer" method="post">
             <h2>Password</h2>
+            <input type="hidden" name="action" value="password" />
             <input class="TextInput" type="password" name="currentpwd" placeholder="Current pasword" />
             <input class="TextInput" type="password" name="newpwd" placeholder="New pasword" />
+            <input class="TextInput" type="password" name="newpwd2" placeholder="Repeat new pasword" />
             <div class="FormButtonLine">
                 <input class="FormButton" type="submit" value="Change" />
             </div>

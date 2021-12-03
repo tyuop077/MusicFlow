@@ -1,0 +1,12 @@
+﻿#successTooltip {
+    color: green;
+    text-align: center;
+}
+
+.avatarImage {
+    display: block;
+    border-radius: 50%;
+    height: 128px;
+    width: 128px;
+    margin: 8px auto;
+}

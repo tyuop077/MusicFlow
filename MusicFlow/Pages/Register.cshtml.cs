@@ -48,7 +48,7 @@ namespace MusicFlow.Pages
 
             if (username is null || !usernameRegex.IsMatch(username))
             {
-                ViewData["tooltip"] = "Invalid username, hover over email field for more info";
+                ViewData["tooltip"] = "Invalid username, hover over username field for more info";
                 return Page();
             }
 
@@ -60,7 +60,7 @@ namespace MusicFlow.Pages
 
             if (password != password2)
             {
-                ViewData["tooltip"] = $"Passwords aren't same, please try again";
+                ViewData["tooltip"] = "Passwords aren't same, please try again";
                 return Page();
             }
 

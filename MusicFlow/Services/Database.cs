@@ -82,6 +82,25 @@ namespace MusicFlow.Services
                 return DBResult<User>.NotFound<User>();
             }
         }
+        public async Task<bool> VerifyPasword(string id, byte[] hashedPassword)
+        {
+            SqlCommand command = new SqlCommand("SELECT password FROM Users WHERE id = @id", connection);
+            command.Parameters.AddWithValue("@id", id);
+            using (SqlDataReader reader = await command.ExecuteReaderAsync())
+            {
+                if (reader.HasRows)
+                {
+                    await reader.ReadAsync();
+                    byte[] pwd = new byte[32];
+                    reader.GetBytes(0, 0, pwd, 0, 32);
+                    if (hashedPassword.SequenceEqual(pwd))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
         public async Task<User> FetchUser(string id)
         {
             SqlCommand command = new SqlCommand("SELECT email, avatar FROM Users WHERE id = @id", connection);
@@ -100,5 +119,24 @@ namespace MusicFlow.Services
                 else throw new Exception();
             }
         }
+        async Task<bool> SetDBValue(string id, string key, object value)
+        {
+            SqlCommand command = new SqlCommand($"UPDATE Users SET {key} = @value OUTPUT @@ROWCOUNT WHERE id = @id", connection);
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@value", value);
+            try
+            {
+                int result = (int)await command.ExecuteScalarAsync();
+                if (result == 1)
+                {
+                    return true;
+                }
+            }
+            catch { }
+            return false;
+        }
+        public Task<bool> ChangeEmail(string id, string newEmail) => SetDBValue(id, "email", newEmail);
+        public Task<bool> ChangePassword(string id, byte[] newHashedPassword) => SetDBValue(id, "password", newHashedPassword);
+        public Task<bool> SetAvatarValue(string id, string avatar) => SetDBValue(id, "avatar", avatar);
     }
 }
