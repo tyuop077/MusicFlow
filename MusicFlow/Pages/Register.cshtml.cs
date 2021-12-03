@@ -1,4 +1,6 @@
 using System;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +20,19 @@ namespace MusicFlow.Pages
             this.authManager = authManager;
             this.db = database;
         }
+        Regex usernameRegex = new Regex("^(?=.{3,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$", RegexOptions.Compiled);
+        public bool isEmailValid(string email)
+        {
+            try
+            {
+                new MailAddress(email);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
         public IActionResult OnGet()
         {
             return Page();
@@ -25,15 +40,27 @@ namespace MusicFlow.Pages
 
         public async Task<IActionResult> OnPostAsync([FromForm]string email, [FromForm]string username, [FromForm]string password, [FromForm]string password2)
         {
-            if (password != password2)
+            if (!isEmailValid(email))
             {
-                ViewData["tooltip"] = $"Passwords aren't same, please try again";
+                ViewData["tooltip"] = "Enter a valid email";
                 return Page();
             }
 
-            if (password.Length < 8)
+            if (username is null || !usernameRegex.IsMatch(username))
+            {
+                ViewData["tooltip"] = "Invalid username, hover over email field for more info";
+                return Page();
+            }
+
+            if (password is null || password.Length < 8)
             {
                 ViewData["tooltip"] = "Password shouldn't be less, than 8 characters";
+                return Page();
+            }
+
+            if (password != password2)
+            {
+                ViewData["tooltip"] = $"Passwords aren't same, please try again";
                 return Page();
             }
 

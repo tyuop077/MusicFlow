@@ -1,8 +1,48 @@
 ﻿@page
 @model ProfileModel
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpContextAccessor
 @{
-    ViewData["Title"] = "Test page - Music Flow";
+    string username = httpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.Name);
+    string id = httpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    ViewData["Title"] = $"{username}'s profile - MusicFlow";
 }
-<h1>@ViewData["Title"]</h1>
-
-<p>Just an example page for the future</p>
+<link rel="stylesheet" href="~/css/auth.css" />
+<link rel="stylesheet" href="~/css/profile_page.css" />
+<div class="AuthPage">
+    <div class="AuthContainer">
+        @if (ViewData["error"] is not null)
+        {
+            <p id="tooltip">@ViewData["error"]</p>
+        }
+        @if (ViewData["success"] is not null)
+        {
+            <p id="successTooltip">@ViewData["success"]</p>
+        }
+        <h1>Profile</h1>
+        <img class="avatarImage" src=@ViewData["avatar"] alt="Profile avatar" />
+        <p>Current user id: @id</p>
+        <form method="post">
+            <input type="file" name="file" value="asd" />
+            <div class="FormButtonLine">
+                <input class="FormButton" type="submit" value="Reset avatar" />
+            </div>
+        </form>
+        <form class="AuthContainer" method="post">
+            <h2>Email</h2>
+            <input class="TextInput" type="email" name="email" value=@ViewData["Email"] placeholder="Email" />
+            <div class="FormButtonLine">
+                <input class="FormButton" type="submit" value="Change" />
+            </div>
+        </form>
+        <form class="AuthContainer" method="post">
+            <h2>Password</h2>
+            <input class="TextInput" type="password" name="currentpwd" placeholder="Current pasword" />
+            <input class="TextInput" type="password" name="newpwd" placeholder="New pasword" />
+            <div class="FormButtonLine">
+                <input class="FormButton" type="submit" value="Change" />
+            </div>
+        </form>
+    </div>
+</div>

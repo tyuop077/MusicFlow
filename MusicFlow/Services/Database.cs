@@ -82,5 +82,23 @@ namespace MusicFlow.Services
                 return DBResult<User>.NotFound<User>();
             }
         }
+        public async Task<User> FetchUser(string id)
+        {
+            SqlCommand command = new SqlCommand("SELECT email, avatar FROM Users WHERE id = @id", connection);
+            command.Parameters.AddWithValue("@id", id);
+            using (SqlDataReader reader = await command.ExecuteReaderAsync())
+            {
+                if (reader.HasRows)
+                {
+                    await reader.ReadAsync();
+                    return new User
+                    {
+                        Email = reader.GetString(0),
+                        Avatar = reader.IsDBNull(1) ? null : reader.GetString(1)
+                    };
+                }
+                else throw new Exception();
+            }
+        }
     }
 }

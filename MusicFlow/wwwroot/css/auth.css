@@ -14,14 +14,6 @@
     justify-content: center;
 }
 
-.AuthContainer img {
-    width: 100px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 100px;
-}
-
 p {
     padding-top: 10px;
     font: normal 18px Calibri;
