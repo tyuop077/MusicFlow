@@ -23,6 +23,12 @@ namespace MusicFlow.Pages
         }
         public async Task<IActionResult> OnPostAsync([FromForm] string email, [FromForm] string password)
         {
+            if (email is null || password is null)
+            {
+                ViewData["tooltip"] = "Wrong email or password";
+                return Page();
+            }
+
             byte[] hashedPassword = authManager.HashPassword(password);
 
             DBResult<User> res = await db.LoginUser(email, hashedPassword);

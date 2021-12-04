@@ -58,10 +58,6 @@ namespace MusicFlow
             services.AddSingleton(new Database(Configuration.GetConnectionString("db")));
 
             services.AddHttpContextAccessor();
-
-            //services.AddMvc(); (used AddControllers instead)
-
-            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,8 +92,6 @@ namespace MusicFlow
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapControllers();
-                //endpoints.MapControllerRoute("default", "{controller=Logout}/{action=Logout}"); (used controllers instead)
             });
         }
     }

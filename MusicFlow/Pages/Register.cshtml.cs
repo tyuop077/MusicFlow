@@ -86,8 +86,7 @@ namespace MusicFlow.Pages
                 MaxAge = TimeSpan.FromDays(7)
             });
 
-            //return Redirect("/");
-            return RedirectToPage("Index");
+            return Redirect("/");
         }
     }
 }
