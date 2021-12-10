@@ -34,17 +34,28 @@
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <img class="nav-link text-white" src="img/Search.svg" asp-area="" asp-page="/search" />
+                        </li>
                         @if (username is not null)
                         {
-                            <a class="nav-link text-white" asp-area="" asp-page="/profile">@username</a>
+                            <li class="dropdown">
+                                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    @username
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" asp-area="" asp-page="/profile">Profile</a>
+                                    <a class="dropdown-item" asp-area="" asp-page="/logout">Logout</a>
+                                </div>
+                            </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/login">Sign in</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/register">Register</a>
+                                <div class="btn-group" role="group" aria-label="Auth">
+                                    <a type="button" class="btn btn-info" asp-area="" asp-page="/login">Sign in</a>
+                                    <a type="button" class="btn btn-outline-info" asp-area="" asp-page="/register">Register</a>
+                                </div>
                             </li>
                         }
                     </ul>
