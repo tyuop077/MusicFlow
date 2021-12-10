@@ -17,7 +17,7 @@ namespace MusicFlow.Pages
             this.authManager = authManager;
             this.db = database;
         }
-        public IActionResult OnGet()
+        public PageResult OnGet()
         {
             return Page();
         }

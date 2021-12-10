@@ -33,7 +33,7 @@ namespace MusicFlow.Pages
                 return false;
             }
         }
-        public IActionResult OnGet()
+        public PageResult OnGet()
         {
             return Page();
         }
