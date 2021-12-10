@@ -21,12 +21,11 @@ namespace MusicFlow.Pages
         {
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync([FromForm] string email, [FromForm] string password)
+        public async Task<JsonResult> OnPostAsync([FromForm] string email, [FromForm] string password)
         {
             if (email is null || password is null)
             {
-                ViewData["tooltip"] = "Wrong email or password";
-                return Page();
+                return Resp.SetError("Wrong email or password");
             }
 
             byte[] hashedPassword = authManager.HashPassword(password);
@@ -41,12 +40,11 @@ namespace MusicFlow.Pages
                 {
                     MaxAge = TimeSpan.FromDays(7)
                 });
-                return RedirectToPage("Index");
+                return Resp.SetSuccess();
             }
             else
             {
-                ViewData["tooltip"] = "Wrong email or password";
-                return Page();
+                return Resp.SetError("Wrong email or password");
             }
         }
     }

@@ -38,30 +38,26 @@ namespace MusicFlow.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync([FromForm]string email, [FromForm]string username, [FromForm]string password, [FromForm]string password2)
+        public async Task<JsonResult> OnPostAsync([FromForm]string email, [FromForm]string username, [FromForm]string password, [FromForm]string password2)
         {
-            if (!isEmailValid(email))
+            if (email is null || !isEmailValid(email))
             {
-                ViewData["tooltip"] = "Enter a valid email";
-                return Page();
+                return Resp.SetError("Enter a valid email");
             }
 
             if (username is null || !usernameRegex.IsMatch(username))
             {
-                ViewData["tooltip"] = "Invalid username, hover over username field for more info";
-                return Page();
+                return Resp.SetError("Invalid username, hover over username field for more info");
             }
 
             if (password is null || password.Length < 8)
             {
-                ViewData["tooltip"] = "Password shouldn't be less, than 8 characters";
-                return Page();
+                return Resp.SetError("Password shouldn't be less, than 8 characters");
             }
 
             if (password != password2)
             {
-                ViewData["tooltip"] = "Passwords aren't same, please try again";
-                return Page();
+                return Resp.SetError("Passwords aren't same, please try again");
             }
 
             User user = new User
@@ -75,8 +71,7 @@ namespace MusicFlow.Pages
 
             if (dbRes == DBReturnStatus.ALREADY_EXISTS)
             {
-                ViewData["tooltip"] = "That user already exists!";
-                return Page();
+                return Resp.SetError("That user already exists!");
             }
 
             string token = authManager.GenerateToken(user);
@@ -86,7 +81,7 @@ namespace MusicFlow.Pages
                 MaxAge = TimeSpan.FromDays(7)
             });
 
-            return Redirect("/");
+            return Resp.SetSuccess();
         }
     }
 }
