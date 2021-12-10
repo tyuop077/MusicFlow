@@ -16,20 +16,4 @@
         <p>Have an account? <a href="/register">Sign in here</a></p>
     </form>
 </div>
-
-<script>
-    $("#auth").submit(e => {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "register",
-            dataType: "json",
-            data: $("#auth").serialize(),
-            success: data => {
-                console.log(data);
-                if (data.success) window.location.href = "/";
-                $("#tooltip").text(data.error)
-            }
-        });
-    });
-</script>
+<script src="~/js/auth.js"></script>

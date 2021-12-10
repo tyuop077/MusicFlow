@@ -14,20 +14,4 @@
         <p>Haven't registered? <a href="/register">Register here</a></p>
     </form>
 </div>
-
-<script>
-    $("#auth").submit(e => {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "login",
-            dataType: "json",
-            data: $("#auth").serialize(),
-            success: data => {
-                console.log(data);
-                if (data.success) window.location.href = "/";
-                $("#tooltip").text(data.error)
-            }
-        });
-    });
-</script>
+<script src="~/js/auth.js"></script>
