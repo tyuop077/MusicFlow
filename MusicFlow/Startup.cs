@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -29,7 +26,10 @@ namespace MusicFlow
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+            services.AddRazorPages(options => {
+                options.Conventions.AuthorizeFolder("/library");
+                options.Conventions.AuthorizeFolder("/forum");
+            });
 
             services.AddRouting(options => options.LowercaseUrls = true);
 
@@ -71,6 +71,8 @@ namespace MusicFlow
             {
                 app.UseExceptionHandler("/Error");
             }
+
+            app.UseStatusCodePagesWithReExecute("/statusHandler/{0}");
 
             app.UseStaticFiles();
 
