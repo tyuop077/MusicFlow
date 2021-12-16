@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using System.Web;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MusicFlow.Pages
@@ -14,7 +11,7 @@ namespace MusicFlow.Pages
             switch(code)
             {
                 case 401:
-                    Response.Redirect("/login");
+                    Response.Redirect($"/login?r={HttpUtility.UrlEncode(HttpContext.Features.Get<IStatusCodeReExecuteFeature>().OriginalPath)}");
                     return;
                 case 404:
                     ViewData["Header"] = "Page not found... :(";

@@ -16,24 +16,18 @@ namespace MusicFlow.Middlewares
             _next = next;
         }
 
-        public void AddHeader(HttpContext context, string key, string value)
-        {
-            if (context.Response.Headers.ContainsKey(key))
-            {
-                context.Response.Headers.Remove(key);
-            }
-            context.Response.Headers.Add(key, value);
-        }
-
         public Task Invoke(HttpContext context)
         {
-            string token = context.Request.Cookies["token"];
-            if (!string.IsNullOrEmpty(token))
-                AddHeader(context, "Authorization", "Bearer " + token);
+            if (context.Response.Headers.All(x => x.Key != "X-Content-Type-Options"))
+            {
+                string token = context.Request.Cookies["token"];
+                if (!string.IsNullOrEmpty(token))
+                    context.Response.Headers.Add("Authorization", "Bearer " + token);
 
-            AddHeader(context, "X-Content-Type-Options", "nosniff");
-            AddHeader(context, "X-Xss-Protection", "1");
-            AddHeader(context, "X-Frame-Options", "DENY");
+                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                context.Response.Headers.Add("X-Xss-Protection", "1");
+                context.Response.Headers.Add("X-Frame-Options", "DENY");
+            }
 
             return _next(context);
         }
