@@ -38,7 +38,7 @@ namespace MusicFlow.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             var claim = HttpContext.User;
-            if (claim.FindFirstValue(ClaimTypes.NameIdentifier) is null)
+            if (!claim.Identity.IsAuthenticated)
             {
                 return RedirectToPage("Index");
             }
