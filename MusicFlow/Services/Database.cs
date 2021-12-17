@@ -194,7 +194,7 @@ namespace MusicFlow.Services
         }
         public async Task<List<ForumThread>> FetchForumThreads(int page)
         {
-            SqlCommand command = new SqlCommand("SELECT tid, topic, oid FROM ForumThreads ORDER BY tid OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
+            SqlCommand command = new SqlCommand("SELECT tid, topic, oid, pinned FROM ForumThreads ORDER BY tid OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
             command.Parameters.AddWithValue("@offset", 20*(page - 1));
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
             {
@@ -207,7 +207,8 @@ namespace MusicFlow.Services
                         {
                             Tid = reader.GetInt32(0),
                             Topic = reader.GetString(1),
-                            Oid = reader.GetInt32(2)
+                            Oid = reader.GetInt32(2),
+                            Pinned = reader.GetBoolean(3)
                         });
                     } catch (SqlException)
                     {

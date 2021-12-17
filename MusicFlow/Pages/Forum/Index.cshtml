@@ -24,7 +24,10 @@
 @foreach (var thread in Model.Threads) {
 <div class="card border-secondary mb-3">
     <div class="card-header bg-secondary">
-        <a href="/forum/@thread.Tid" class="font-weight-bolder text-white">@thread.Topic</a>
+        @if (thread.Pinned) {
+        <span class="badge bg-light">Pinned</span>
+        }
+        <a href="/forum/@thread.Tid" class="font-weight-bolder @(thread.Pinned ? "text-warning" : "text-white")">@thread.Topic</a>
     </div>
     <div class="card-body">
         Created by @thread.Oid
