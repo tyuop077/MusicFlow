@@ -17,7 +17,7 @@ CREATE TABLE Users (
 
 CREATE TABLE ForumThreads (
     tid INT NOT NULL IDENTITY(1,1) PRIMARY KEY, -- thread id
-    title VARCHAR(64) NOT NULL, -- DEFAULT 'Untitled thread'
+    topic VARCHAR(64) NOT NULL, -- DEFAULT 'Untitled thread'
     oid INT NOT NULL, -- thread owner id
     CONSTRAINT FTOwnerById FOREIGN KEY (oid) REFERENCES Users(id) -- ON DELETE CASCADE ON UPDATE CASCADE
 )
