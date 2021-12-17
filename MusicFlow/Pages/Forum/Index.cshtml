@@ -21,11 +21,13 @@
     </form>
 </div>
 
+@foreach (var thread in Model.Threads) {
 <div class="card border-secondary mb-3">
     <div class="card-header bg-secondary">
-        <a href="/test" class="font-weight-bolder text-white">Discussions category</a>
+        <a href="/forum/@thread.Tid" class="font-weight-bolder text-white">@thread.Topic</a>
     </div>
     <div class="card-body">
-        This is some text within a card body.
+        Created by @thread.Oid
     </div>
 </div>
+}

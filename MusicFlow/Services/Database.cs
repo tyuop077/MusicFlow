@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -190,6 +191,61 @@ namespace MusicFlow.Services
             }
             catch (SqlException) { }
             return DBReturnStatus.NOT_FOUND;
+        }
+        public async Task<List<ForumThread>> FetchForumThreads(int page)
+        {
+            SqlCommand command = new SqlCommand("SELECT tid, topic, oid FROM ForumThreads ORDER BY tid OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
+            command.Parameters.AddWithValue("@offset", 20*page);
+            using (SqlDataReader reader = await command.ExecuteReaderAsync())
+            {
+                List<ForumThread> threads = new();
+                while (reader.HasRows)
+                {
+                    await reader.ReadAsync();
+                    try
+                    {
+                        threads.Add(new ForumThread
+                        {
+                            Tid = reader.GetInt32(0),
+                            Topic = reader.GetString(1),
+                            Oid = reader.GetInt32(2)
+                        });
+                    } catch (SqlException)
+                    {
+                        threads.Add(new ForumThread { Topic = "Failed to preview thread" } );
+                    }
+                }
+                return threads;
+            }
+        }
+        public async Task<List<ForumContent>> FetchThreadContents(string tid, int page)
+        {
+            SqlCommand command = new SqlCommand("SELECT id, oid, content, rid FROM ThreadsContents WHERE tid = @tid ORDER BY id OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
+            command.Parameters.AddWithValue("@tid", tid);
+            command.Parameters.AddWithValue("@offset", 20 * page);
+            using (SqlDataReader reader = await command.ExecuteReaderAsync())
+            {
+                List<ForumContent> contents = new();
+                while (reader.HasRows)
+                {
+                    await reader.ReadAsync();
+                    try
+                    {
+                        contents.Add(new ForumContent
+                        {
+                            Id = reader.GetInt32(0),
+                            Oid = reader.GetInt32(1),
+                            Content = reader.GetString(2),
+                            Rid = reader.GetInt32(3)
+                        });
+                    }
+                    catch (SqlException)
+                    {
+                        contents.Add(new ForumContent { Content = "Failed to preview message" });
+                    }
+                }
+                return contents;
+            }
         }
     }
 }

@@ -1,25 +1,29 @@
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MusicFlow.Entities;
+using MusicFlow.Services;
 
 namespace MusicFlow.Pages.Forum
 {
     public class IndexModel : PageModel
     {
-        public ForumThread[] Threads { get; set; }
-        public void OnGet()
+        private Database db;
+        public IndexModel(Database database)
         {
-
+            this.db = database;
         }
-        public async Task<IActionResult> OnPostAsync([FromForm] string topic)
+        public List<ForumThread> Threads { get; set; }
+        public async Task OnGetAsync()
         {
-            if (topic is null || topic == "")
-            {
-                ViewData["error"] = "Topic can't be empty";
-                return Page();
-            }
-            return Page();
+            Threads = await db.FetchForumThreads(0);
+        }
+        public async Task<RedirectResult> OnPostAsync([FromForm] string topic)
+        {
+            int tid = await db.CreateForumThread(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), topic ?? "Untitled thread");
+            return Redirect($"/forum/{tid}");
         }
     }
 }
