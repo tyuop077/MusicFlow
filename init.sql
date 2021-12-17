@@ -1,6 +1,5 @@
 CREATE DATABASE MusicFlow
 USE MusicFlow
---DROP TABLE Users
 
 CREATE TABLE Users (
     id INT NOT NULL IDENTITY(1,1),
@@ -14,7 +13,21 @@ CREATE TABLE Users (
     PRIMARY KEY (id)
 )
 
---INSERT INTO Users(email, username, password) OUTPUT inserted.id VALUES('', '', '')
+--SELECT TOP 100 * FROM Users
 
---SELECT * FROM Users
---SELECT TOP 100 u.* FROM Users u
+CREATE TABLE ForumThreads (
+    tid INT NOT NULL IDENTITY(1,1) PRIMARY KEY, -- thread id
+    title VARCHAR(64) NOT NULL, -- DEFAULT 'Untitled thread'
+    oid INT NOT NULL, -- thread owner id
+    CONSTRAINT FTOwnerById FOREIGN KEY (oid) REFERENCES Users(id) -- ON DELETE CASCADE ON UPDATE CASCADE
+)
+
+CREATE TABLE ThreadsContents (
+    id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, -- message id
+    tid INT NOT NULL,
+    oid INT NOT NULL, -- message owner id
+    content VARCHAR(4096) NOT NULL,
+    rid INT, -- reply id
+    CONSTRAINT TCOwnerById FOREIGN KEY (oid) REFERENCES Users(id)
+    --INDEX ThreadsSortedMessages (id, tid ASC)
+)
