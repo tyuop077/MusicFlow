@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,7 +57,7 @@ namespace MusicFlow.Services
         }
         public async Task<DBResult<User>> LoginUser(string email, byte[] hashedPassword)
         {
-            SqlCommand command = new SqlCommand("SELECT id, password, username FROM Users WHERE email = @email", connection);
+            SqlCommand command = new SqlCommand("SELECT id, password, username, role FROM Users WHERE email = @email", connection);
             command.Parameters.AddWithValue("@email", email);
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
             {
@@ -73,7 +71,8 @@ namespace MusicFlow.Services
                         User user = new User
                         {
                             Id = reader.GetInt32(0),
-                            Username = reader.GetString(2)
+                            Username = reader.GetString(2),
+                            Role = (UserRole)reader.GetByte(3)
                         };
                         return DBResult<User>.Success(user);
                     }

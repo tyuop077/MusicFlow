@@ -27,7 +27,8 @@ namespace MusicFlow.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    user.Role is not 0 ? new Claim(ClaimTypes.Role, ((byte)user.Role).ToString()) : null
                 }),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(secretKey),

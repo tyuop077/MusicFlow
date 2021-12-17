@@ -10,6 +10,7 @@ CREATE TABLE Users (
     --salt BINARY(4) salt for each user (harder to bruteforce)
     --avatar VARBINARY(max), -- IMAGE was deprecated in ms sql
     avatar VARCHAR(255), -- id of avatar path
+    role TINYINT DEFAULT 0, -- 0 user; 1 staff
     PRIMARY KEY (id)
 )
 

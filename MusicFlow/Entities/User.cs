@@ -13,5 +13,11 @@ namespace MusicFlow.Entities
         public string Username { get; set; }
         public byte[] Password { get; set; }
         public string Avatar { get; set; }
+        public UserRole Role { get; set; } = 0;
+    }
+    public enum UserRole
+    {
+        User,
+        Staff
     }
 }
