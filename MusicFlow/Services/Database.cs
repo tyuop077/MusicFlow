@@ -42,7 +42,7 @@ namespace MusicFlow.Services
             command.Parameters.AddWithValue("@password", user.Password);
             try
             {
-                int result = (int)(await command.ExecuteScalarAsync());
+                int result = (int)await command.ExecuteScalarAsync();
                 user.Id = result;
                 return DBReturnStatus.SUCCESS;
             }
@@ -137,5 +137,22 @@ namespace MusicFlow.Services
         public Task<bool> ChangeEmail(string id, string newEmail) => SetDBValue(id, "email", newEmail);
         public Task<bool> ChangePassword(string id, byte[] newHashedPassword) => SetDBValue(id, "password", newHashedPassword);
         public Task<bool> SetAvatarValue(string id, string avatar) => SetDBValue(id, "avatar", avatar);
+        public async Task<DBResult<int>> CreateForumThread(string id, string topic)
+        {
+            SqlCommand command = new SqlCommand("INSERT INTO ForumThreads(topic, oid) OUTPUT inserted.tid VALUES(@topic, @oid)", connection);
+            command.Parameters.AddWithValue("@topic", topic);
+            command.Parameters.AddWithValue("@oid", id);
+            /*try
+            {
+                int result = (int)await command.ExecuteScalarAsync();
+                return DBResult<int>.Success(result);
+            }
+            catch (SqlException e)
+            {
+                return DBReturnStatus.NOT_FOUND;
+            }*/
+            int result = (int)await command.ExecuteScalarAsync();
+            return DBResult<int>.Success(result);
+        }
     }
 }
