@@ -131,28 +131,65 @@ namespace MusicFlow.Services
                     return true;
                 }
             }
-            catch { }
+            catch (SqlException) { }
             return false;
         }
         public Task<bool> ChangeEmail(string id, string newEmail) => SetDBValue(id, "email", newEmail);
         public Task<bool> ChangePassword(string id, byte[] newHashedPassword) => SetDBValue(id, "password", newHashedPassword);
         public Task<bool> SetAvatarValue(string id, string avatar) => SetDBValue(id, "avatar", avatar);
-        public async Task<DBResult<int>> CreateForumThread(string id, string topic)
+        public async Task<int> CreateForumThread(string oid, string topic)
         {
             SqlCommand command = new SqlCommand("INSERT INTO ForumThreads(topic, oid) OUTPUT inserted.tid VALUES(@topic, @oid)", connection);
             command.Parameters.AddWithValue("@topic", topic);
-            command.Parameters.AddWithValue("@oid", id);
-            /*try
+            command.Parameters.AddWithValue("@oid", oid);
+            return (int)await command.ExecuteScalarAsync();
+        }
+        public async Task<DBResult<int>> GetForumMessageOwnerId(string id)
+        {
+            SqlCommand command = new SqlCommand("SELECT oid FROM ThreadsContents WHERE(id = @id)", connection);
+            command.Parameters.AddWithValue("@id", id);
+            try
             {
-                int result = (int)await command.ExecuteScalarAsync();
-                return DBResult<int>.Success(result);
+                int oid = (int)await command.ExecuteScalarAsync();
+                return DBResult<int>.Success(oid);
+            } catch (SqlException) { }
+            return DBResult<int>.NotFound<int>();
+        }
+        public async Task<int> CreateThreadMessage(string tid, string oid, string content, string rid)
+        {
+            SqlCommand command = new SqlCommand("INSERT INTO ThreadsContents(tid, oid, content, rid) OUTPUT inserted.id VALUES(@tid, @oid, @content, @rid)", connection);
+            command.Parameters.AddWithValue("@tid", tid);
+            command.Parameters.AddWithValue("@oid", oid);
+            command.Parameters.AddWithValue("@content", content);
+            command.Parameters.AddWithValue("@rid", rid);
+            return (int)await command.ExecuteScalarAsync();
+        }
+        public async Task<DBReturnStatus> DeleteForumMessage(string id, string oid)
+        {
+            SqlCommand command = new SqlCommand("DELETE ThreadsContents OUTPUT 1 WHERE (id = @id AND oid = @oid)", connection);
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@oid", oid);
+            try
+            {
+                if ((int)await command.ExecuteScalarAsync() is 1)
+                    return DBReturnStatus.SUCCESS;
             }
-            catch (SqlException e)
+            catch (SqlException) { }
+            return DBReturnStatus.NOT_FOUND;
+        }
+        public async Task<DBReturnStatus> EditForumMessage(string id, string oid, string content)
+        {
+            SqlCommand command = new SqlCommand("UPDATE ThreadsContents SET content = @content OUTPUT 1 WHERE (id = @id AND oid = @oid)", connection);
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@oid", oid);
+            command.Parameters.AddWithValue("@content", content);
+            try
             {
-                return DBReturnStatus.NOT_FOUND;
-            }*/
-            int result = (int)await command.ExecuteScalarAsync();
-            return DBResult<int>.Success(result);
+                if ((int)await command.ExecuteScalarAsync() is 1)
+                    return DBReturnStatus.SUCCESS;
+            }
+            catch (SqlException) { }
+            return DBReturnStatus.NOT_FOUND;
         }
     }
 }
