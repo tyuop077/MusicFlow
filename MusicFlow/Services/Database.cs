@@ -195,7 +195,7 @@ namespace MusicFlow.Services
         public async Task<List<ForumThread>> FetchForumThreads(int page)
         {
             SqlCommand command = new SqlCommand("SELECT tid, topic, oid, pinned FROM ForumThreads ORDER BY tid OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
-            command.Parameters.AddWithValue("@offset", 20*(page - 1));
+            command.Parameters.AddWithValue("@offset", 20 * (page - 1));
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
             {
                 List<ForumThread> threads = new();
@@ -218,14 +218,15 @@ namespace MusicFlow.Services
                 return threads;
             }
         }
-        public async Task<List<ForumContent>> FetchThreadContents(string tid, int page)
+        public async Task<DBResult<List<ForumContent>>> FetchThreadContents(int tid, int page)
         {
             SqlCommand command = new SqlCommand("SELECT id, oid, content, rid FROM ThreadsContents WHERE tid = @tid ORDER BY id OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
             command.Parameters.AddWithValue("@tid", tid);
-            command.Parameters.AddWithValue("@offset", 20 * page);
+            command.Parameters.AddWithValue("@offset", 20 * (page - 1));
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
             {
                 List<ForumContent> contents = new();
+                if (!reader.HasRows) return DBResult<List<ForumContent>>.NotFound<List<ForumContent>>();
                 while (reader.Read())
                 {
                     try
@@ -243,7 +244,30 @@ namespace MusicFlow.Services
                         contents.Add(new ForumContent { Content = "Failed to preview message" });
                     }
                 }
-                return contents;
+                return DBResult<List<ForumContent>>.Success(contents);
+            }
+        }
+        public async Task<DBResult<ForumThread>> FetchForumThread(int tid)
+        {
+            SqlCommand command = new SqlCommand("SELECT topic, oid, pinned FROM ForumThreads WHERE tid = @tid", connection);
+            command.Parameters.AddWithValue("@tid", tid);
+            using (SqlDataReader reader = await command.ExecuteReaderAsync())
+            {
+                if (reader.HasRows)
+                {
+                    try
+                    {
+                        await reader.ReadAsync();
+                        return DBResult<ForumThread>.Success(new ForumThread
+                        {
+                            Tid = reader.GetInt32(0),
+                            Topic = reader.GetString(1),
+                            Oid = reader.GetInt32(2),
+                            Pinned = reader.GetBoolean(3)
+                        });
+                    } catch (SqlException) { }
+                }
+                return DBResult<ForumThread>.NotFound<ForumThread>();
             }
         }
     }

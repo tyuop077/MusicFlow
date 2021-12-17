@@ -26,10 +26,7 @@ namespace MusicFlow
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages(options => {
-                options.Conventions.AuthorizeFolder("/library");
-                options.Conventions.AuthorizeFolder("/forum");
-            });
+            services.AddRazorPages();
 
             services.AddRouting(options => options.LowercaseUrls = true);
 
@@ -78,6 +75,10 @@ namespace MusicFlow
 
             app.UseRouting();
 
+            MiddlewareExtensions.UseAuthMiddleware(app);
+
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseCookiePolicy(new CookiePolicyOptions
@@ -86,10 +87,6 @@ namespace MusicFlow
                 HttpOnly = HttpOnlyPolicy.Always,
                 Secure = CookieSecurePolicy.Always
             });
-
-            MiddlewareExtensions.UseAuthMiddleware(app);
-
-            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

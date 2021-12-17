@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MusicFlow.Entities;
@@ -8,13 +9,11 @@ using MusicFlow.Services;
 
 namespace MusicFlow.Pages.Forum
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private Database db;
-        public IndexModel(Database database)
-        {
-            this.db = database;
-        }
+        public IndexModel(Database database) => this.db = database;
         public List<ForumThread> Threads { get; set; }
         public async Task OnGetAsync()
         {
