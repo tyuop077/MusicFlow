@@ -12,13 +12,13 @@
     <div class="card-header text-white bg-success">
         Create thread
     </div>
-    <form class="card-body" method="POST">
-        <label for="topic" class="form-label">Thread topic</label>
-        <div class="input-group mb-3">
+    <div class="card-body" method="POST">
+        <label for="topic" class="form-label">Thread topic @Model.Threads.Count</label>
+        <form class="input-group mb-3" method="POST">
             <input type="text" class="form-control" id="topic" placeholder="Untitled thread">
             <button type="submit" class="btn btn-info w-25">Create</button>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
 @foreach (var thread in Model.Threads) {

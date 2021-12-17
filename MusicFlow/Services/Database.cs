@@ -195,13 +195,12 @@ namespace MusicFlow.Services
         public async Task<List<ForumThread>> FetchForumThreads(int page)
         {
             SqlCommand command = new SqlCommand("SELECT tid, topic, oid FROM ForumThreads ORDER BY tid OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
-            command.Parameters.AddWithValue("@offset", 20*page);
+            command.Parameters.AddWithValue("@offset", 20*(page - 1));
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
             {
                 List<ForumThread> threads = new();
-                while (reader.HasRows)
+                while (reader.Read())
                 {
-                    await reader.ReadAsync();
                     try
                     {
                         threads.Add(new ForumThread
@@ -226,9 +225,8 @@ namespace MusicFlow.Services
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
             {
                 List<ForumContent> contents = new();
-                while (reader.HasRows)
+                while (reader.Read())
                 {
-                    await reader.ReadAsync();
                     try
                     {
                         contents.Add(new ForumContent

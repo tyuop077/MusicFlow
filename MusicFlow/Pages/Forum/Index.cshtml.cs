@@ -18,7 +18,7 @@ namespace MusicFlow.Pages.Forum
         public List<ForumThread> Threads { get; set; }
         public async Task OnGetAsync()
         {
-            Threads = await db.FetchForumThreads(0);
+            Threads = await db.FetchForumThreads(1);
         }
         public async Task<RedirectResult> OnPostAsync([FromForm] string topic)
         {
