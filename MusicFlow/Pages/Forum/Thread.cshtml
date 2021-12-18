@@ -10,7 +10,7 @@
 
 @foreach (var message in Model.Contents)
 {
-    <div class="card mb-3">
+    <div class="card mb-3" id=@($"m{message.Id}")>
         <div class="card-body">
             @message.Content
         </div>
@@ -20,7 +20,7 @@
     </div>
 }
 
-<form class="form-group" method="POST" action=@(RouteData.Values["id"] + "/sendMessage")>
+<form class="form-group" method="POST" action=@($"{RouteData.Values["id"]}/sendMessage")>
     @Html.AntiForgeryToken()
     <label for="content">Send a new message</label>
     <textarea class="form-control" name="content" rows="3"></textarea>
