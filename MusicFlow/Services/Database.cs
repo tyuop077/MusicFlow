@@ -160,9 +160,9 @@ namespace MusicFlow.Services
         {
             SqlCommand command = new SqlCommand("INSERT INTO ThreadsContents(tid, oid, content, rid) OUTPUT inserted.id VALUES(@tid, @oid, @content, @rid)", connection);
             command.Parameters.AddWithValue("@tid", tid);
-            command.Parameters.AddWithValue("@oid", oid is null ? DBNull.Value : oid);
+            command.Parameters.AddWithValue("@oid", oid);
             command.Parameters.AddWithValue("@content", content);
-            command.Parameters.AddWithValue("@rid", rid);
+            command.Parameters.AddWithValue("@rid", rid is null ? DBNull.Value : rid);
             return (int)await command.ExecuteScalarAsync();
         }
         public async Task<DBReturnStatus> DeleteForumMessage(string id, string oid)
@@ -235,7 +235,7 @@ namespace MusicFlow.Services
                             Id = reader.GetInt32(0),
                             Oid = reader.GetInt32(1),
                             Content = reader.GetString(2),
-                            Rid = reader.GetInt32(3)
+                            Rid = reader.IsDBNull(3) ? 0 : reader.GetInt32(3)
                         });
                     }
                     catch (SqlException)
