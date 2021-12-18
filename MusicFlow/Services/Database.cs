@@ -156,7 +156,7 @@ namespace MusicFlow.Services
             } catch (SqlException) { }
             return DBResult<int>.NotFound<int>();
         }
-        public async Task<int> CreateThreadMessage(string tid, string oid, string content, string rid)
+        public async Task<int> CreateThreadMessage(int tid, string oid, string content, string rid)
         {
             SqlCommand command = new SqlCommand("INSERT INTO ThreadsContents(tid, oid, content, rid) OUTPUT inserted.id VALUES(@tid, @oid, @content, @rid)", connection);
             command.Parameters.AddWithValue("@tid", tid);
@@ -218,7 +218,7 @@ namespace MusicFlow.Services
                 return threads;
             }
         }
-        public async Task<DBResult<List<ForumContent>>> FetchThreadContents(int tid, int page)
+        public async Task<List<ForumContent>> FetchThreadContents(int tid, int page)
         {
             SqlCommand command = new SqlCommand("SELECT id, oid, content, rid FROM ThreadsContents WHERE tid = @tid ORDER BY id OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
             command.Parameters.AddWithValue("@tid", tid);
@@ -226,7 +226,6 @@ namespace MusicFlow.Services
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
             {
                 List<ForumContent> contents = new();
-                if (!reader.HasRows) return DBResult<List<ForumContent>>.NotFound<List<ForumContent>>();
                 while (reader.Read())
                 {
                     try
@@ -244,7 +243,7 @@ namespace MusicFlow.Services
                         contents.Add(new ForumContent { Content = "Failed to preview message" });
                     }
                 }
-                return DBResult<List<ForumContent>>.Success(contents);
+                return contents;
             }
         }
         public async Task<DBResult<ForumThread>> FetchForumThread(int tid)
@@ -260,10 +259,9 @@ namespace MusicFlow.Services
                         await reader.ReadAsync();
                         return DBResult<ForumThread>.Success(new ForumThread
                         {
-                            Tid = reader.GetInt32(0),
-                            Topic = reader.GetString(1),
-                            Oid = reader.GetInt32(2),
-                            Pinned = reader.GetBoolean(3)
+                            Topic = reader.GetString(0),
+                            Oid = reader.GetInt32(1),
+                            Pinned = reader.GetBoolean(2)
                         });
                     } catch (SqlException) { }
                 }

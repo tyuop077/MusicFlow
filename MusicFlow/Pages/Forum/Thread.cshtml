@@ -1,0 +1,15 @@
+﻿@page "~/forum/{id:int:min(1)}/{handler?}"
+@model MusicFlow.Pages.Forum.ThreadModel
+
+@if (@Model.Thread.Pinned)
+{
+<span class="badge bg-warning">Pinned</span>
+}
+<h1>@Model.Thread.Topic</h1>
+<h6>Started by @Model.Thread.Oid</h6>
+
+<form class="form-group" method="POST" action=@(RouteData.Values["id"] + "/sendMessage")>
+    <label for="content">Send a new message</label>
+    <textarea class="form-control" name="content" rows="3"></textarea>
+    <button type="submit" class="btn btn-primary mt-2">Send</button>
+</form>
