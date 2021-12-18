@@ -3,6 +3,9 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor httpContextAccessor
+@{ 
+    string id = httpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+}
 
 @if (@Model.Thread.Pinned)
 {
@@ -13,19 +16,39 @@
     <span class="badge bg-dark text-white">Locked</span>
 }
 <h1>@Model.Thread.Topic</h1>
-<img class="rounded-circle" src="@Model.Thread.Owner.AvatarURL" />
-<h6>Started by @Model.Thread.Owner.Username</h6>
+<p>
+    <img class="rounded-circle" style="width: 35px;" src="@Model.Thread.Owner.AvatarURL" />
+    <b>Started by @Model.Thread.Owner.Username</b>
+</p>
 
 @foreach (var message in Model.Contents)
 {
-    <div class="card mb-3" id=@($"m{message.Id}")>
-        <div class="card-body">
-            @message.Content
+<div class="card mb-3" id=@($"m{message.Id}")>
+    @if (message.Rid is not 0)
+    {
+        <div class="card-header">
+            <a href=@($"#m{message.Rid}")>replied to</a>
         </div>
-        <small class="card-footer text-muted">
-            Sent by @message.Oid
-        </small>
+    }
+    <div class="card-body">
+        @message.Content
     </div>
+    <small class="card-footer text-muted">
+        <img style="height: 25px;" class="rounded-circle" src="@message.Owner.AvatarURL" />
+        @message.Owner.Username
+        <div class="btn-group w-25 float-right" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-dark">
+                <img src="~/img/reply.svg" />
+                Reply
+            </button>
+            @if (message.Oid.ToString() == id)
+            {
+                <button type="button" class="btn btn-warning">Edit</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+            }
+        </div>
+    </small>
+</div>
 }
 
 @if (Model.Thread.Locked)

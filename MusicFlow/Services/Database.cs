@@ -227,7 +227,7 @@ namespace MusicFlow.Services
         }
         public async Task<List<ForumContent>> FetchThreadContents(int tid, int page)
         {
-            SqlCommand command = new SqlCommand("SELECT id, oid, content, rid FROM ThreadsContents WHERE tid = @tid ORDER BY id OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
+            SqlCommand command = new SqlCommand("SELECT TC.id, oid, content, rid, username, avatar, email FROM ThreadsContents TC INNER JOIN Users U on U.id = TC.oid WHERE tid = @tid ORDER BY id OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
             command.Parameters.AddWithValue("@tid", tid);
             command.Parameters.AddWithValue("@offset", 20 * (page - 1));
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
@@ -242,7 +242,13 @@ namespace MusicFlow.Services
                             Id = reader.GetInt32(0),
                             Oid = reader.GetInt32(1),
                             Content = reader.GetString(2),
-                            Rid = reader.IsDBNull(3) ? 0 : reader.GetInt32(3)
+                            Rid = reader.IsDBNull(3) ? 0 : reader.GetInt32(3),
+                            Owner = new User
+                            {
+                                Username = reader.GetString(4),
+                                Avatar = reader.IsDBNull(5) ? null : reader.GetString(5),
+                                Email = reader.GetString(6)
+                            }
                         });
                     }
                     catch (SqlException)
