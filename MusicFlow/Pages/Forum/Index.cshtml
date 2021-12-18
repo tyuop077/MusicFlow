@@ -24,13 +24,18 @@
 @foreach (var thread in Model.Threads) {
 <div class="card border-secondary mb-3">
     <div class="card-header bg-secondary">
-        @if (thread.Pinned) {
-        <span class="badge bg-light">Pinned</span>
+        @if (thread.Pinned)
+        {
+            <span class="badge bg-light">Pinned</span>
+        }
+        @if (thread.Locked)
+        {
+            <span class="badge bg-dark text-white">Locked</span>
         }
         <a href="/forum/@thread.Tid" class="font-weight-bolder @(thread.Pinned ? "text-warning" : "text-white")">@thread.Topic</a>
     </div>
     <div class="card-body">
-        <img src="@thread.Owner.AvatarURL" />
+        <img style="height: 25px;" class="rounded-circle" src="@thread.Owner.AvatarURL" />
         Created by @thread.Owner.Username
     </div>
 </div>

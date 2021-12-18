@@ -1,12 +1,19 @@
 ﻿@page "~/forum/{id:int:min(1)}/{handler?}"
 @model MusicFlow.Pages.Forum.ThreadModel
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpContextAccessor
 
 @if (@Model.Thread.Pinned)
 {
     <span class="badge bg-warning">Pinned</span>
 }
+@if (@Model.Thread.Locked)
+{
+    <span class="badge bg-dark text-white">Locked</span>
+}
 <h1>@Model.Thread.Topic</h1>
-<img src="@Model.Thread.Owner.AvatarURL" />
+<img class="rounded-circle" src="@Model.Thread.Owner.AvatarURL" />
 <h6>Started by @Model.Thread.Owner.Username</h6>
 
 @foreach (var message in Model.Contents)
@@ -21,10 +28,20 @@
     </div>
 }
 
-<form class="form-group" method="POST" action=@($"{RouteData.Values["id"]}/sendMessage")>
-    @Html.AntiForgeryToken()
-    <label for="content">Send a new message</label>
-    <textarea class="form-control" name="content" rows="3"></textarea>
-    <input type="hidden" name="rid" />
-    <button type="submit" class="btn btn-primary mt-2">Send</button>
-</form>
+@if (Model.Thread.Locked)
+{
+    <div class="card text-white bg-dark mb-3 w-100">
+        <div class="card-header">This thread is locked by staff</div>
+    </div>
+}
+
+@if (!Model.Thread.Locked || httpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.Role) is "1")
+{
+    <form class="form-group" method="POST" action=@($"{RouteData.Values["id"]}/sendMessage")>
+        @Html.AntiForgeryToken()
+        <label for="content">Send a new message</label>
+        <textarea class="form-control" name="content" rows="3"></textarea>
+        <input type="hidden" name="rid" />
+        <button type="submit" class="btn btn-primary mt-2">Send</button>
+    </form>
+}
