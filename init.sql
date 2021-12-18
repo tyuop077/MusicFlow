@@ -20,6 +20,7 @@ CREATE TABLE ForumThreads (
     topic VARCHAR(64) NOT NULL, -- DEFAULT 'Untitled thread'
     oid INT NOT NULL, -- thread owner id
     pinned BIT NOT NULL DEFAULT 0,
+    locked BIT NOT NULL DEFAULT 0,
     CONSTRAINT FTOwnerById FOREIGN KEY (oid) REFERENCES Users(id) -- ON DELETE CASCADE ON UPDATE CASCADE
 )
 

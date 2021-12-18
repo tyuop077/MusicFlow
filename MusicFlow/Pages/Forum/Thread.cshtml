@@ -6,7 +6,8 @@
     <span class="badge bg-warning">Pinned</span>
 }
 <h1>@Model.Thread.Topic</h1>
-<h6>Started by @Model.Thread.Oid</h6>
+<img src="@Model.Thread.Owner.AvatarURL" />
+<h6>Started by @Model.Thread.Owner.Username</h6>
 
 @foreach (var message in Model.Contents)
 {
@@ -24,5 +25,6 @@
     @Html.AntiForgeryToken()
     <label for="content">Send a new message</label>
     <textarea class="form-control" name="content" rows="3"></textarea>
+    <input type="hidden" name="rid" />
     <button type="submit" class="btn btn-primary mt-2">Send</button>
 </form>

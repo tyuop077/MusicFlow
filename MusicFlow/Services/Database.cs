@@ -194,7 +194,7 @@ namespace MusicFlow.Services
         }
         public async Task<List<ForumThread>> FetchForumThreads(int page)
         {
-            SqlCommand command = new SqlCommand("SELECT tid, topic, oid, pinned FROM ForumThreads ORDER BY tid OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
+            SqlCommand command = new SqlCommand("SELECT tid, topic, oid, pinned, locked, username, avatar, email FROM ForumThreads INNER JOIN Users U on U.id = ForumThreads.oid ORDER BY tid OFFSET @offset ROWS FETCH NEXT 20 ROWS ONLY", connection);
             command.Parameters.AddWithValue("@offset", 20 * (page - 1));
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
             {
@@ -208,7 +208,14 @@ namespace MusicFlow.Services
                             Tid = reader.GetInt32(0),
                             Topic = reader.GetString(1),
                             Oid = reader.GetInt32(2),
-                            Pinned = reader.GetBoolean(3)
+                            Pinned = reader.GetBoolean(3),
+                            Locked = reader.GetBoolean(4),
+                            Owner = new User
+                            {
+                                Username = reader.GetString(5),
+                                Avatar = reader.IsDBNull(6) ? null : reader.GetString(6),
+                                Email = reader.GetString(7)
+                            }
                         });
                     } catch (SqlException)
                     {
@@ -248,7 +255,7 @@ namespace MusicFlow.Services
         }
         public async Task<DBResult<ForumThread>> FetchForumThread(int tid)
         {
-            SqlCommand command = new SqlCommand("SELECT topic, oid, pinned FROM ForumThreads WHERE tid = @tid", connection);
+            SqlCommand command = new SqlCommand("SELECT topic, oid, pinned, locked, username, avatar, email FROM ForumThreads INNER JOIN Users U on U.id = ForumThreads.oid WHERE tid = @tid", connection);
             command.Parameters.AddWithValue("@tid", tid);
             using (SqlDataReader reader = await command.ExecuteReaderAsync())
             {
@@ -261,7 +268,14 @@ namespace MusicFlow.Services
                         {
                             Topic = reader.GetString(0),
                             Oid = reader.GetInt32(1),
-                            Pinned = reader.GetBoolean(2)
+                            Pinned = reader.GetBoolean(2),
+                            Locked = reader.GetBoolean(3),
+                            Owner = new User
+                            {
+                                Username = reader.GetString(4),
+                                Avatar = reader.IsDBNull(5) ? null : reader.GetString(5),
+                                Email = reader.GetString(6)
+                            }
                         });
                     } catch (SqlException) { }
                 }

@@ -30,7 +30,8 @@
         <a href="/forum/@thread.Tid" class="font-weight-bolder @(thread.Pinned ? "text-warning" : "text-white")">@thread.Topic</a>
     </div>
     <div class="card-body">
-        Created by @thread.Oid
+        <img src="@thread.Owner.AvatarURL" />
+        Created by @thread.Owner.Username
     </div>
 </div>
 }
