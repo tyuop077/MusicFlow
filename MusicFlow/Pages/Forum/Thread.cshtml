@@ -3,10 +3,22 @@
 
 @if (@Model.Thread.Pinned)
 {
-<span class="badge bg-warning">Pinned</span>
+    <span class="badge bg-warning">Pinned</span>
 }
 <h1>@Model.Thread.Topic</h1>
 <h6>Started by @Model.Thread.Oid</h6>
+
+@foreach (var message in Model.Contents)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            @message.Content
+        </div>
+        <small class="card-footer text-muted">
+            Sent by @message.Oid
+        </small>
+    </div>
+}
 
 <form class="form-group" method="POST" action=@(RouteData.Values["id"] + "/sendMessage")>
     @Html.AntiForgeryToken()
