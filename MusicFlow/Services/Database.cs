@@ -160,7 +160,7 @@ namespace MusicFlow.Services
         {
             SqlCommand command = new SqlCommand("INSERT INTO ThreadsContents(tid, oid, content, rid) OUTPUT inserted.id VALUES(@tid, @oid, @content, @rid)", connection);
             command.Parameters.AddWithValue("@tid", tid);
-            command.Parameters.AddWithValue("@oid", oid);
+            command.Parameters.AddWithValue("@oid", oid is null ? DBNull.Value : oid);
             command.Parameters.AddWithValue("@content", content);
             command.Parameters.AddWithValue("@rid", rid);
             return (int)await command.ExecuteScalarAsync();
