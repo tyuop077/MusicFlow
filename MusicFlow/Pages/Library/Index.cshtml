@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{handler?}"
 @model MusicFlow.Pages.Library.IndexModel
 @{
     ViewData["Title"] = "My Library - Music Flow";
@@ -6,18 +6,21 @@
 
 <button type="button" class="btn btn-success mb-2">Import song</button>
 
-<div class="card">
-    <div class="card-header">
-        <b>Example song</b> - Example artist
-    </div>
-    <div class="card-body">
-        <audio controls class="w-100">
-            <source src="unspecified.mp3" type="audio/mpeg">
-        </audio>
-        <div class="btn-group float-right" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-primary">Share</button>
-            <button type="button" class="btn btn-warning">Edit</button>
-            <button type="button" class="btn btn-danger">Delete</button>
+@foreach (var Song in Model.Library)
+{
+    <div class="card">
+        <div class="card-header">
+            <b>@Song.Name</b> - @Song.Artists
+        </div>
+        <div class="card-body">
+            <audio controls class="w-100">
+                <source src="library/song?id=@Song.Id" type="audio/mpeg">
+            </audio>
+            <div class="btn-group float-right" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-primary">Share</button>
+                <button type="button" class="btn btn-warning">Edit</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+            </div>
         </div>
     </div>
-</div>
+}

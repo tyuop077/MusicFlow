@@ -284,5 +284,45 @@ namespace MusicFlow.Services
                 return DBResult<ForumThread>.NotFound<ForumThread>();
             }
         }
+        public async Task<List<MusicLibrary>> FetchUserLibrary(string oid)
+        {
+            SqlCommand command = new SqlCommand("SELECT id, name, artists FROM UserLibrary WHERE oid = @oid", connection);
+            command.Parameters.AddWithValue("@oid", oid);
+            int OwnerId = int.Parse(oid);
+            using (SqlDataReader reader = await command.ExecuteReaderAsync())
+            {
+                List<MusicLibrary> contents = new();
+                while (reader.Read())
+                {
+                    try
+                    {
+                        contents.Add(new MusicLibrary
+                        {
+                            Id = Guid.Parse(reader.GetString(0)),
+                            Oid = OwnerId,
+                            Name = reader.GetString(1),
+                            Artists = reader.GetString(2)
+                        });
+                    }
+                    catch (SqlException)
+                    {
+                        contents.Add(new MusicLibrary { Name = "Failed to preview library" });
+                    }
+                }
+                return contents;
+            }
+        }
+        public async Task<DBResult<System.IO.Stream>> FetchSong(Guid id)
+        {
+            SqlCommand command = new SqlCommand("SELECT data FROM MusicContents WHERE id  = @id", connection);
+            command.CommandType = System.Data.CommandType.Text;
+            command.Parameters.AddWithValue("@id", id);
+            using (SqlDataReader reader = await command.ExecuteReaderAsync(System.Data.CommandBehavior.SequentialAccess | System.Data.CommandBehavior.SingleRow))
+            {
+                if (!await reader.ReadAsync()) return DBResult<System.IO.Stream>.NotFound<System.IO.Stream>();
+                System.IO.Stream stream = reader.GetStream(1);
+                return DBResult<System.IO.Stream>.Success(stream);
+            }
+        }
     }
 }
