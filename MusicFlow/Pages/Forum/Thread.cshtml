@@ -37,14 +37,14 @@
         <img style="height: 25px;" class="rounded-circle" src="@message.Owner.AvatarURL" />
         @message.Owner.Username
         <div class="btn-group w-25 float-right" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-dark">
+            <button type="button" class="btn btn-dark" onclick="fm.reply('@message.Id')">
                 <img src="~/img/reply.svg" />
                 Reply
             </button>
             @if (message.Oid.ToString() == id)
             {
-                <button type="button" class="btn btn-warning">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-warning" onclick="fm.edit('@message.Id')">Edit</button>
+                <button type="button" class="btn btn-danger" onclick="fm.delete('@message.Id')">Delete</button>
             }
         </div>
     </small>
@@ -66,5 +66,8 @@
         <textarea class="form-control" name="content" rows="3"></textarea>
         <input type="hidden" name="rid" />
         <button type="submit" class="btn btn-primary mt-2">Send</button>
+        <button type="reset" class="btn btn-danger mt-2">Clear</button>
+        <button type="button" class="btn btn-dark mt-2" id="unreplyBtn" onclick="fm.unreply()">Remove reply</button>
     </form>
 }
+<script src="~/js/forum.js"></script>

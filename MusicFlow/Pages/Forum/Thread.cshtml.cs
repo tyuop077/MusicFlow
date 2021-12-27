@@ -28,11 +28,25 @@ namespace MusicFlow.Pages.Forum
             }
             return NotFound();
         }
-        public async Task<RedirectResult> OnPostSendMessage(int id, [FromForm] string content)
+        public async Task<RedirectResult> OnPostSendMessage(int id, [FromForm] string content, [FromForm] int rid)
         {
             string oid = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            int result = await db.CreateThreadMessage(id, oid, content, null);
+            int result = await db.CreateThreadMessage(id, oid, content, rid);
             return Redirect($"/forum/{id}#m{result}");
+        }
+        public async Task<EmptyResult> OnPostDeleteMessage(int id, [FromForm] int mid)
+        {
+            string oid = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            DBReturnStatus result = await db.DeleteForumMessage(mid, oid);
+            HttpContext.Response.StatusCode = result is DBReturnStatus.SUCCESS ? 200 : 404;
+            return new EmptyResult();
+        }
+        public async Task<EmptyResult> OnPostEditMessage(int id, [FromForm] int mid, [FromForm] string content)
+        {
+            string oid = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            DBReturnStatus result = await db.EditForumMessage(mid, oid, content);
+            HttpContext.Response.StatusCode = result is DBReturnStatus.SUCCESS ? 200 : 404;
+            return new EmptyResult();
         }
     }
 }

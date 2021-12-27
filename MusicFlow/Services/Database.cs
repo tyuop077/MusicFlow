@@ -156,29 +156,25 @@ namespace MusicFlow.Services
             } catch (SqlException) { }
             return DBResult<int>.NotFound<int>();
         }
-        public async Task<int> CreateThreadMessage(int tid, string oid, string content, string rid)
+        public async Task<int> CreateThreadMessage(int tid, string oid, string content, int rid)
         {
             SqlCommand command = new SqlCommand("INSERT INTO ThreadsContents(tid, oid, content, rid) OUTPUT inserted.id VALUES(@tid, @oid, @content, @rid)", connection);
             command.Parameters.AddWithValue("@tid", tid);
             command.Parameters.AddWithValue("@oid", oid);
             command.Parameters.AddWithValue("@content", content);
-            command.Parameters.AddWithValue("@rid", rid is null ? DBNull.Value : rid);
+            command.Parameters.AddWithValue("@rid", rid is 0 ? DBNull.Value : rid);
             return (int)await command.ExecuteScalarAsync();
         }
-        public async Task<DBReturnStatus> DeleteForumMessage(string id, string oid)
+        public async Task<DBReturnStatus> DeleteForumMessage(int id, string oid)
         {
             SqlCommand command = new SqlCommand("DELETE ThreadsContents OUTPUT 1 WHERE (id = @id AND oid = @oid)", connection);
             command.Parameters.AddWithValue("@id", id);
             command.Parameters.AddWithValue("@oid", oid);
-            try
-            {
-                if ((int)await command.ExecuteScalarAsync() is 1)
-                    return DBReturnStatus.SUCCESS;
-            }
-            catch (SqlException) { }
+            if ((int)await command.ExecuteScalarAsync() is 1)
+                return DBReturnStatus.SUCCESS;
             return DBReturnStatus.NOT_FOUND;
         }
-        public async Task<DBReturnStatus> EditForumMessage(string id, string oid, string content)
+        public async Task<DBReturnStatus> EditForumMessage(int id, string oid, string content)
         {
             SqlCommand command = new SqlCommand("UPDATE ThreadsContents SET content = @content OUTPUT 1 WHERE (id = @id AND oid = @oid)", connection);
             command.Parameters.AddWithValue("@id", id);
