@@ -1,5 +1,6 @@
-﻿class fm {
+﻿class fm { // forum message
     static delete(id) {
+        if (!confirm("Are you sure you wanna delete that message?")) return;
         $.ajax({
             type: "POST",
             url: "/forum/1/deleteMessage",
@@ -9,7 +10,6 @@
             },
             complete: (res) => {
                 if (res.status === 200) {
-                    alert("Deleted successfuly");
                     location.reload();
                 } else if (res.status === 404) {
                     alert("Message was not found")
@@ -18,17 +18,18 @@
         })
     }
     static edit(id) {
+        const content = prompt("New message");
+        if (!content) return;
         $.ajax({
             type: "POST",
             url: "/forum/1/editMessage",
             data: {
                 __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
                 mid: id,
-                content: prompt("New message")
+                content
             },
             complete: (res) => {
                 if (res.status === 200) {
-                    alert("Message was edited successfuly");
                     location.reload();
                 } else if (res.status === 404) {
                     alert("Message was not found")
