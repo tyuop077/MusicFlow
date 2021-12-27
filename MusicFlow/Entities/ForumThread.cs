@@ -6,7 +6,7 @@
         public string Topic { get; set; }
         public int Oid { get; set; } // owner id
         public bool Pinned { get; set; }
-        public bool Locked { get; set; } // starff-only
+        public bool Locked { get; set; } // staff-only
         public User Owner { get; set; }
     }
 }
