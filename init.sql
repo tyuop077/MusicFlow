@@ -33,3 +33,20 @@ CREATE TABLE ThreadsContents (
     CONSTRAINT TCOwnerById FOREIGN KEY (oid) REFERENCES Users(id)
     --INDEX ThreadsSortedMessages (id, tid ASC)
 )
+
+CREATE TABLE MusicContents (
+    --id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY ROWGUIDCOL, -- guid to prevent private music fetch via id by going through all ids
+    --data VARBINARY(47185920) FILESTREAM -- max size - 45mb
+    id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
+    data VARBINARY(MAX)
+)
+
+CREATE TABLE UserLibrary (
+    oid INT NOT NULL, -- owner id
+    id UNIQUEIDENTIFIER NOT NULL, -- music content id
+    name VARCHAR(256) NOT NULL,
+    artists VARCHAR(256) NOT NULL,
+    FOREIGN KEY (id) REFERENCES MusicContents(id),
+    FOREIGN KEY (oid) REFERENCES Users(id),
+    PRIMARY KEY (oid, id)
+)
